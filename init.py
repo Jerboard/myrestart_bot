@@ -28,12 +28,11 @@ load_dotenv ()
 loop = asyncio.get_event_loop()
 dp = Dispatcher()
 bot = Bot(getenv("TOKEN"), parse_mode=ParseMode.HTML)
-
 TZ = timezone('Europe/Moscow')
 
 scheduler = AsyncIOScheduler(timezone=TZ)
 
-DEBUG = bool(getenv('DEBUG'))
+DEBUG = bool(int(getenv('DEBUG')))
 
 ENGINE = create_async_engine(url=getenv('DB_URL'))
 

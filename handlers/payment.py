@@ -11,6 +11,7 @@ import keyboards as kb
 from init import dp, bot, DATE_FORMAT, TZ
 from utils.cover_photos import get_cover_photo
 from utils.data import tariffs
+from enums import UserStatus
 
 
 # дневник притяжений основное меню
@@ -74,7 +75,12 @@ async def payment_tariff(cb: CallbackQuery):
     for i in range(0, tariff['duration']):
         end_date = end_date + timedelta(days=30)
 
-    await db.update_user_info(user_id=cb.from_user.id, end_date=end_date, status='active')
+    await db.update_user_info(
+        user_id=cb.from_user.id,
+        end_date=end_date,
+        status=UserStatus.ACTIVE.value,
+        start_trial='stop'
+    )
     text = (f'Оплата прошла успешно\n\n'
             f'Ваша подписка истекает: {end_date.strftime(DATE_FORMAT)}')
 

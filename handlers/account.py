@@ -1,4 +1,5 @@
 from aiogram.types import CallbackQuery, InputMediaPhoto
+from aiogram.fsm.context import FSMContext
 
 import db
 import keyboards as kb
@@ -8,7 +9,7 @@ from utils.cover_photos import get_cover_photo
 
 # ЛК основное меню
 @dp.callback_query(lambda cb: cb.data.startswith('account_start'))
-async def account_start(cb: CallbackQuery):
+async def account_start(cb: CallbackQuery, state: FSMContext):
     user_info = await db.get_user_info (cb.from_user.id)
     if user_info.status != 'active':
         text = 'Для доступа в личный кабинет оплатите подписку'

@@ -7,7 +7,7 @@ from init import TZ
 from db.base import METADATA, begin_connection
 
 
-class AttractionRow(t.Protocol):
+class GoalRow(t.Protocol):
     id: int
     user_id: int
     create_date: date
@@ -19,8 +19,8 @@ class AttractionRow(t.Protocol):
     question_5: str
 
 
-AttractionTable = sa.Table(
-    'attractions',
+goalTable = sa.Table(
+    'goals',
     METADATA,
     sa.Column('id', sa.Integer, primary_key=True, autoincrement=True),
     sa.Column('user_id', sa.Integer),
@@ -36,25 +36,25 @@ AttractionTable = sa.Table(
 
 # возвращает все даты когда есть записи для пользователя
 async def get_all_attr_date_user(user_id: int) -> date:
-    query = sa.select (sa.func.min (AttractionTable.c.create_date)).where (AttractionTable.c.user_id == user_id)
+    query = sa.select (sa.func.min (goalTable.c.create_date)).where (goalTable.c.user_id == user_id)
     async with begin_connection () as conn:
         result = await conn.scalar (query)
     return result
 
 
 # добавляет притяжение
-async def add_attraction(
+async def add_goal(
         user_id: int,
         question_1: str,
         question_2: str,
         question_3: str,
-        question_4: str,
-        question_5: str
+        question_4: str = None,
+        question_5: str = None
 ) -> None:
     now = datetime.now(TZ)
     async with begin_connection () as conn:
         await conn.execute(
-            AttractionTable.insert().values(
+            goalTable.insert().values(
                 user_id=user_id,
                 create_date=now.date(),
                 create_time=now.time(),
@@ -67,23 +67,21 @@ async def add_attraction(
 
 
 # поиск по притяжениям
-async def search_attractions(user_id: int, search_query: str) -> tuple[AttractionRow]:
-    query = AttractionTable.select().where(AttractionTable.c.user_id == user_id).limit(10)
+async def search_goals(user_id: int, search_query: str) -> tuple[GoalRow]:
+    query = goalTable.select().where(goalTable.c.user_id == user_id).limit(10)
 
     if search_query:
         date_str = search_query.replace ('/', '.').replace (' ', '.')
         date_split = date_str.split ('.')
         day = int (date_split [0]) if date_split [0] != '' else None
-        # month = int (date_split [1]) if date_split [1] != '' else None
         if len(date_split) == 0 and len(date_split[1]) > 0:
-            # day = int(date_split[0]) if date_split[0] != '' else None
             month = int(date_split[1]) if date_split[1] != '' else None
             query = query.where (
-                sa.func.extract ('day', AttractionTable.c.create_date) == day,
-                sa.func.extract ('month', AttractionTable.c.create_date) == month)
+                sa.func.extract ('day', goalTable.c.create_date) == day,
+                sa.func.extract ('month', goalTable.c.create_date) == month)
 
         else:
-            query = query.where (AttractionTable.c.create_date.like(f'%{date_split [0]}%'))
+            query = query.where (goalTable.c.create_date.like(f'%{date_split [0]}%'))
 
     async with begin_connection() as conn:
         result = await conn.execute(query)
@@ -92,9 +90,9 @@ async def search_attractions(user_id: int, search_query: str) -> tuple[Attractio
 
 
 # возвращает притяжение по id
-async def get_attraction(attraction_id: int) -> t.Union[AttractionRow, None]:
+async def get_goal(goal_id: int) -> t.Union[GoalRow, None]:
     async with begin_connection () as conn:
         result = await conn.execute (
-            AttractionTable.select().where(AttractionTable.c.id == attraction_id)
+            goalTable.select().where(goalTable.c.id == goal_id)
         )
     return result.first()

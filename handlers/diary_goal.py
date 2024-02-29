@@ -6,20 +6,25 @@ import db
 import keyboards as kb
 from init import dp, bot, DATE_FORMAT
 from utils.cover_photos import get_cover_photo
+from enums import DiaryCB
 
 
 # дневник притяжений основное меню
-@dp.callback_query(lambda cb: cb.data.startswith('diary_attraction_main'))
-async def diary_attraction(cb: CallbackQuery, state: FSMContext):
+@dp.callback_query(lambda cb: cb.data.startswith(DiaryCB.DIARY_GOAL_MAIN.value))
+async def diary_goal(cb: CallbackQuery, state: FSMContext):
     await state.clear()
-    text = 'Дневник притяжений'
-    photo = InputMediaPhoto (media=get_cover_photo('diary_attraction'), caption=text)
-    await cb.message.edit_media (media=photo, reply_markup=kb.get_main_attraction_kb ())
+    text = ('<b>Дневник целей\n'
+            'Основа для привлечения событий и жизненных обстоятельств</b>\n\n'
+            'Мысли, выраженные как убеждения, могут помочь достичь более быстрых результатов. '
+            'Когда вы ясно представляете свои цели, это создает основу для того, чтобы действовать в заложенном '
+            'векторе, привлекать события и обстоятельства в свою жизнь.')
+    photo = InputMediaPhoto (media=get_cover_photo('diary_goals'), caption=text)
+    await cb.message.edit_media (media=photo, reply_markup=kb.get_main_goal_kb ())
 
 
 # дневник притяжений архив сообщений
-@dp.callback_query(lambda cb: cb.data.startswith('archive_attraction'))
-async def attraction_archive(cb: CallbackQuery, state: FSMContext):
+@dp.callback_query(lambda cb: cb.data.startswith(DiaryCB.ARCHIVE_GOAL.value))
+async def goal_archive(cb: CallbackQuery, state: FSMContext):
     min_date = await db.get_all_attr_date_user(cb.from_user.id)
     if not min_date:
         text = 'У вас нет ни одной записи в дневнике'
@@ -27,36 +32,37 @@ async def attraction_archive(cb: CallbackQuery, state: FSMContext):
     else:
         await state.set_state('search')
         await state.update_data(data={
-            'on': 'attractions',
+            'on': 'goals',
             'message_id': cb.message.message_id
         })
 
         min_date_str = min_date.strftime(DATE_FORMAT)
         text = (f'Доступен поиск начиная с {min_date_str}\n\n'
                 f'Введите число и месяц')
-        photo = InputMediaPhoto (media=get_cover_photo('diary_attraction'), caption=text)
-        await cb.message.edit_media (media=photo, reply_markup=kb.get_search_kb ('diary_attraction_main'))
-        # await cb.message.edit_media (media=photo, reply_markup=kb.get_back_button ('diary_attraction_main'))
+        photo = InputMediaPhoto (media=get_cover_photo('diary_goals'), caption=text)
+        await cb.message.edit_media (media=photo, reply_markup=kb.get_search_kb ('diary_goal_main'))
+        # await cb.message.edit_media (media=photo, reply_markup=kb.get_back_button ('diary_goal_main'))
 
 
 # дневник притяжений опрос
-@dp.callback_query(lambda cb: cb.data.startswith('add_attraction'))
-async def add_attraction(cb: CallbackQuery, state: FSMContext):
-    text = f'Какие цели и изменения вы хотели бы добавить в свою жизнь?\n\nВопрос 1'
-    await state.set_state('add_attraction')
+@dp.callback_query(lambda cb: cb.data.startswith(DiaryCB.ADD_GOAL.value))
+async def add_goal(cb: CallbackQuery, state: FSMContext):
+    text = (f'Какие цели и изменения вы хотели бы добавить в свою жизнь?\n\n'
+            f'Вопрос 1')
+    await state.set_state('add_goal')
     await state.update_data(data={
         'question': 1,
         'message_id': cb.message.message_id,
         'text': text
     })
 
-    photo = InputMediaPhoto (media=get_cover_photo ('diary_attraction'), caption=text)
-    await cb.message.edit_media (media=photo, reply_markup=kb.get_back_button ('diary_attraction_main'))
+    photo = InputMediaPhoto (media=get_cover_photo ('diary_goals'), caption=text)
+    await cb.message.edit_media (media=photo, reply_markup=kb.get_back_button ('diary_goal_main'))
 
 
 # принимает ответы
-@dp.message(StateFilter('add_attraction'))
-async def add_attraction_answers(msg: Message, state: FSMContext):
+@dp.message(StateFilter('add_goal'))
+async def add_goal_answers(msg: Message, state: FSMContext):
     await msg.delete()
     data = await state.get_data()
     question = data["question"]
@@ -71,7 +77,7 @@ async def add_attraction_answers(msg: Message, state: FSMContext):
     elif question == 4:
         bottom_text = f'Вопрос 5'
     else:
-        await db.add_attraction (
+        await db.add_goal (
             user_id=msg.from_user.id,
             question_1=data ['answer_1'],
             question_2=data ['answer_2'],
@@ -98,5 +104,5 @@ async def add_attraction_answers(msg: Message, state: FSMContext):
         chat_id=msg.chat.id,
         message_id=data['message_id'],
         caption=text,
-        reply_markup=kb.get_back_button ('diary_attraction_main')
+        reply_markup=kb.get_back_button ('diary_goal_main')
     )

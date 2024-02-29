@@ -28,7 +28,6 @@ def get_daily_stress_plot(user_id: int, data: tuple[DailyStressData]):
     plt.figure (figsize=(16, 10), dpi=80)
 
     current_year = datetime.now(TZ).year
-
     calmap.yearplot(
         data=df_work,
         year=current_year,

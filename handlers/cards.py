@@ -10,7 +10,10 @@ from utils.cover_photos import get_cover_photo
 # Карты старт
 @dp.callback_query(lambda cb: cb.data.startswith('cards_main'))
 async def diary_thanks_main(cb: CallbackQuery):
-    text = 'Это ваше меню'
+    text = ('<b>Карты RE.START\n'
+            'Инструмент для улучшения когнитивных способностей</b>\n\n'
+            'Вопросы помогут вам открыть честность в отношениях с собой и выявлять области, где вы ограничиваете '
+            'свои возможности в повседневных решениях.')
     photo = InputMediaPhoto (media=get_cover_photo ('choice_card'), caption=text)
     await cb.message.edit_media (media=photo, reply_markup=kb.get_main_card_kb ())
 

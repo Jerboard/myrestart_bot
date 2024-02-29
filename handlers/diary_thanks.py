@@ -6,19 +6,24 @@ import db
 import keyboards as kb
 from init import dp, bot, DATE_FORMAT
 from utils.cover_photos import get_cover_photo
+from enums import DiaryCB
 
 
 # дневник благодарности старт
-@dp.callback_query(lambda cb: cb.data.startswith('diary_thanks_main'))
+@dp.callback_query(lambda cb: cb.data.startswith(DiaryCB.DIARY_THANKS_MAIN.value))
 async def diary_thanks_main(cb: CallbackQuery, state: FSMContext):
     await state.clear()
-    text = f'Рад, что ты решила внезапно поблагодарить себя и мир'
+    text = (f'<b>Дневник благодарности\n'
+            f'Способствует освобождению от стресса и тревоги</b>\n\n'
+            f'Регулярная практика благодарности стимулирует чувства вдохновения, надежды, силы и удовлетворенности '
+            f'жизнью. Записи в Дневнике благодарности помогают освободиться от стресса и тревоги, обучая ценить '
+            f'присутствующие в жизни моменты и людей.')
     photo = InputMediaPhoto (media=get_cover_photo('diary_thanks'), caption=text)
     await cb.message.edit_media (media=photo, reply_markup=kb.get_main_thanks_kb ())
 
 
 # дневник благодарности написать
-@dp.callback_query(lambda cb: cb.data.startswith('diary_thanks_send'))
+@dp.callback_query(lambda cb: cb.data.startswith(DiaryCB.DIARY_THANKS_SEND.value))
 async def diary_thanks_main(cb: CallbackQuery, state: FSMContext):
     text = f'Напиши кого и за что ты хочешь поблагодарить'
     photo = InputMediaPhoto (media=get_cover_photo('diary_thanks'), caption=text)
@@ -45,8 +50,8 @@ async def send_thanks(msg: Message, state: FSMContext):
 
 
 # дневник благодарности архив сообщений
-@dp.callback_query(lambda cb: cb.data.startswith('archive_thanks'))
-async def attraction_archive(cb: CallbackQuery, state: FSMContext):
+@dp.callback_query(lambda cb: cb.data.startswith(DiaryCB.ARCHIVE_THANKS.value))
+async def goal_archive(cb: CallbackQuery, state: FSMContext):
     min_date = await db.get_thanks_min_date_user(cb.from_user.id)
     if not min_date:
         text = 'У вас нет ни одной записи в дневнике'

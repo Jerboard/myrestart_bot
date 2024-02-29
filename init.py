@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from os import getenv
 from pytz import timezone
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.jobstores.redis import RedisJobStore
+
 from datetime import datetime
 
 import logging

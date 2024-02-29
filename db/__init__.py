@@ -1,4 +1,4 @@
-from db.attractions import *
+from db.goals import *
 from db.stress import *
 from db.thanks import *
 from db.cards import *

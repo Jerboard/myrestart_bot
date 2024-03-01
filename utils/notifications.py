@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import db
 import keyboards as kb
 from init import bot, scheduler, TZ
+from utils.cover_photos import get_cover_photo
 from enums import UserStatus
 
 
@@ -42,8 +43,9 @@ async def send_notify():
             notify_type = 'card'
 
         if text and notify_type:
-            await bot.send_message(
+            await bot.send_photo(
                 chat_id=user_info.user_id,
+                photo=get_cover_photo('notice'),
                 text=text,
                 protect_content=True,
                 reply_markup=kb.get_notify_kb(notify_type)

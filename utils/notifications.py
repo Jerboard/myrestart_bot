@@ -46,7 +46,7 @@ async def send_notify():
             await bot.send_photo(
                 chat_id=user_info.user_id,
                 photo=get_cover_photo('notice'),
-                text=text,
+                caption=text,
                 protect_content=True,
                 reply_markup=kb.get_notify_kb(notify_type)
             )

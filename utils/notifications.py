@@ -14,7 +14,7 @@ from enums import UserStatus
 async def notifications_scheduler():
     scheduler.add_job (send_notify, 'cron', minute=0)
     scheduler.add_job (create_notify_stress_map, 'cron', hour=0, minute=0)
-    scheduler.add_job (send_notify_stress, 'cron', second=0)
+    # scheduler.add_job (send_notify_stress, 'cron', second=0)
     scheduler.start ()
 
 
@@ -58,7 +58,7 @@ async def send_notify():
 
         if user_info.start_trial:
             end_trial_time = user_info.start_trial + timedelta(hours=54)
-            if end_trial_time < now:
+            if TZ.localize(end_trial_time) < now:
                 await db.update_user_info(
                     user_id=user_info.user_id,
                     status=UserStatus.INACTIVE.value,

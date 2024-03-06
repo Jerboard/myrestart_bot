@@ -55,4 +55,4 @@ def log_error(message):
     timestamp = datetime.now(TZ)
     filename = traceback.format_exc()[1]
     line_number = traceback.format_exc()[2]
-    logging.error(f'{timestamp} {filename} {line_number}: {message}')
+    logging.warning(f'{timestamp} {filename} {line_number}: {message}')

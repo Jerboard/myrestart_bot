@@ -53,11 +53,14 @@ async def get_user_info(user_id: int) -> t.Union[UserRow, None]:
 
 
 # возвращает информацию пользователя
-async def get_users_notify() -> tuple[UserRow]:
+async def get_users_notify(only_stress: bool = False) -> tuple[UserRow]:
+    query = UserTable.select().where(UserTable.c.status == UserStatus.ACTIVE.value)
+
+    if only_stress:
+        query = query.where(UserTable.c.notify_stress == True)
+
     async with begin_connection() as conn:
-        result = await conn.execute(
-            UserTable.select().where(UserTable.c.status == UserStatus.ACTIVE.value)
-        )
+        result = await conn.execute(query)
     return result.all()
 
 

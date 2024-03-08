@@ -25,4 +25,7 @@ def save_stress_notify(data: dict) -> None:
 
 def get_stress_notify() -> dict:
     data = REDIS_CLIENT.get ('stress_notify_map')
-    return json.loads (data.decode ("utf-8"))
+    if data:
+        return json.loads (data.decode ("utf-8"))
+    else:
+        return {}

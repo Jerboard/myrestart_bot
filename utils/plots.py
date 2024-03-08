@@ -1,3 +1,4 @@
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
@@ -11,6 +12,7 @@ import numpy as np
 from init import TZ, log_error
 from db import DailyStressData
 
+matplotlib.use('Agg')
 
 CMAP = LinearSegmentedColormap.from_list (
     name='stress',
@@ -39,7 +41,6 @@ def get_daily_stress_plot(user_id: int, data: tuple[DailyStressData]):
 
 # глобальный график
 def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
-    log_error('1')
     def normal_pdf(x, mean, var_):
         return np.exp (-(x - mean) ** 2 / (2 * var_))
 
@@ -53,7 +54,6 @@ def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
 
     var = [happy, unhappy]
 
-    log_error ('2')
     gauss_x_high = normal_pdf (xx, means_high [0], var [0])
     gauss_y_high = normal_pdf (yy, means_high [1], var [0])
 
@@ -65,7 +65,6 @@ def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
 
     greys = np.full ((*weights.shape, 3), 70, dtype=np.uint8)
 
-    log_error ('3')
     vmax = np.abs (weights).max ()
     imshow_kwargs = {
         'vmax': vmax,
@@ -74,13 +73,10 @@ def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
         'extent': (xmin, xmax, ymin, ymax),
     }
 
-    log_error ('4')
     fig, ax = plt.subplots ()
     ax.imshow (greys)
     ax.imshow (weights, **imshow_kwargs)
     ax.set_axis_off ()
 
-    log_error ('5')
     file_path = os.path.join ('temp', f'global_{user_id}.jpg')
     plt.savefig (file_path, format='jpg', dpi=500)
-    log_error ('6')

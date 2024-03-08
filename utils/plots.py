@@ -77,8 +77,8 @@ def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
     ax.imshow (weights, **imshow_kwargs)
     ax.set_axis_off ()
 
-    # plt.switch_backend ('Agg')
-    plt.switch_backend ('GTK3Cairo')
+    plt.switch_backend ('Agg')
+    # plt.switch_backend ('GTK3Cairo')
 
     file_path = os.path.join ('temp', f'global_{user_id}.jpg')
     plt.savefig (file_path, format='jpg', dpi=500)

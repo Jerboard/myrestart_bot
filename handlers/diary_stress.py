@@ -72,38 +72,32 @@ async def account_start(cb: CallbackQuery):
             return
 
         else:
-            log_error (f'start_global')
             bit = 1200 / (global_plot_data.happy + global_plot_data.unhappy)
             happy_count = round(global_plot_data.happy * bit)
             unhappy_count = round(global_plot_data.unhappy * bit)
-            plot_ident = f'{happy_count}:{happy_count}'
+            plot_ident = f'{happy_count}:{unhappy_count}'
 
             text = 'График состояния за весь период'
 
             cached_plot = await db.get_plot_cache(type_=plot_type, comment=plot_ident)
-            log_error (f'cached_plot: {cached_plot}')
             if cached_plot:
                 photo = InputMediaPhoto (media=cached_plot.file_id, caption=text)
                 await cb.message.edit_media (media=photo, reply_markup=kb.get_archive_stress_kb (plot_type))
 
             else:
-                log_error (f'get_global_stress_plot')
                 get_global_stress_plot(
                     user_id=cb.from_user.id,
                     happy=happy_count,
                     unhappy=unhappy_count
                 )
-                log_error (f'get_global_stress_plot end')
                 photo_path = os.path.join ('temp', f'{plot_type}_{cb.from_user.id}.jpg')
                 photo_input = FSInputFile (photo_path)
-                log_error (f'photo_path: {photo_path}')
 
                 photo = InputMediaPhoto (media=photo_input, caption=text)
                 sent = await cb.message.edit_media (media=photo, reply_markup=kb.get_archive_stress_kb (plot_type))
                 await db.add_plot_in_cache_global(type_=plot_type, comment=plot_ident, file_id=sent.photo[-1].file_id)
 
-                os.remove(photo_path)
-                log_error (f'end')
+                # os.remove(photo_path)
 
     else:
         text = 'График состояния по дням'

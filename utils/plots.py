@@ -12,7 +12,6 @@ import numpy as np
 from init import TZ, log_error
 from db import DailyStressData
 
-plt.switch_backend('Agg')
 
 CMAP = LinearSegmentedColormap.from_list (
     name='stress',
@@ -77,6 +76,8 @@ def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
     ax.imshow (greys)
     ax.imshow (weights, **imshow_kwargs)
     ax.set_axis_off ()
+
+    plt.switch_backend ('Agg')
 
     file_path = os.path.join ('temp', f'global_{user_id}.jpg')
     plt.savefig (file_path, format='jpg', dpi=500)

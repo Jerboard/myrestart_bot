@@ -9,13 +9,8 @@ METADATA = sa.MetaData ()
 
 
 def begin_connection() -> t.AsyncContextManager [AsyncConnection]:
-    conn = ENGINE.begin ()
-    print(not conn, conn)
-    if not conn:
-        ENGINE.connect()
-        return ENGINE.begin
-    return conn
-    # return ENGINE.begin ()
+    ENGINE.connect ()
+    return ENGINE.begin ()
 
 
 async def init_models():

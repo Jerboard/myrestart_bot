@@ -12,7 +12,12 @@ class ThanksRow(t.Protocol):
     user_id: int
     create_date: date
     create_time: time
-    text: str
+    thank_1: str
+    thank_2: str
+    thank_3: str
+    thank_4: str
+    thank_5: str
+    thank_6: str
 
 
 ThanksTable = sa.Table(
@@ -22,18 +27,36 @@ ThanksTable = sa.Table(
     sa.Column('user_id', sa.Integer),
     sa.Column('create_date', sa.Date),
     sa.Column('create_time', sa.Time),
-    sa.Column('text', sa.Text),
+    sa.Column('thank_1', sa.Text),
+    sa.Column('thank_2', sa.Text),
+    sa.Column('thank_3', sa.Text),
+    sa.Column('thank_4', sa.Text),
+    sa.Column('thank_5', sa.Text),
+    sa.Column('thank_6', sa.Text),
 )
 
 
 # добавляет строку состояния
-async def add_thanks(user_id: int, text: str) -> None:
+async def add_thanks(
+        user_id: int,
+        thank_1: str,
+        thank_2: str,
+        thank_3: str,
+        thank_4: str,
+        thank_5: str,
+        thank_6: str
+) -> None:
     now = datetime.now(TZ)
     query = ThanksTable.insert().values(
         user_id=user_id,
         create_date=now.date(),
         create_time=now.time(),
-        text=text
+        thank_1=thank_1,
+        thank_2=thank_2,
+        thank_3=thank_3,
+        thank_4=thank_4,
+        thank_5=thank_5,
+        thank_6=thank_6
     )
     async with begin_connection () as conn:
         await conn.execute (query)

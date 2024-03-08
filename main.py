@@ -11,8 +11,9 @@ from utils.notifications import notifications_scheduler
 async def main() -> None:
     await init_models()
     await set_main_menu()
-    await notifications_scheduler ()
+    # await notifications_scheduler ()
     await dp.start_polling(bot)
+    await bot.session.close()
 
 
 if __name__ == "__main__":

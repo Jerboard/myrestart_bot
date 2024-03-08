@@ -9,3 +9,7 @@ class UserStatus(str, enum.Enum):
 
 class BaseState(str, enum.Enum):
     SEND_EMAIL_TRIAL = 'send_email_trial'
+
+
+class DiaryState(str, enum.Enum):
+    SEND_THANKS = 'send_thanks'

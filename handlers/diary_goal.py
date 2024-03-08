@@ -72,18 +72,18 @@ async def add_goal_answers(msg: Message, state: FSMContext):
         bottom_text = f'Вопрос 2'
     elif question == 2:
         bottom_text = f'Вопрос 3'
-    elif question == 3:
-        bottom_text = f'Вопрос 4'
-    elif question == 4:
-        bottom_text = f'Вопрос 5'
+    # elif question == 3:
+    #     bottom_text = f'Вопрос 4'
+    # elif question == 4:
+    #     bottom_text = f'Вопрос 5'
     else:
         await db.add_goal (
             user_id=msg.from_user.id,
             question_1=data ['answer_1'],
             question_2=data ['answer_2'],
-            question_3=data ['answer_3'],
-            question_4=data ['answer_4'],
-            question_5=msg.text
+            # question_3=data ['answer_3'],
+            # question_4=data ['answer_4'],
+            question_3=msg.text
         )
         await state.clear ()
 

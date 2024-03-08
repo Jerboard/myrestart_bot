@@ -8,7 +8,7 @@ import keyboards as kb
 from init import dp, bot, DATE_FORMAT, TIME_FORMAT
 from handlers.user_settings import get_setting_main
 from utils.text_utils import get_cut_text
-from utils.data import cities_timezone
+from utils.data import cities_timezone, thanks_questions_text
 
 
 @dp.inline_query()
@@ -46,9 +46,9 @@ async def inline(call: InlineQuery, state: FSMContext):
         if data.get ('on') == 'goals':
             description = (f'1: {get_cut_text(50, result.question_1)}\n'
                            f'2: {get_cut_text(50, result.question_2)}\n'
-                           f'3: {get_cut_text(50, result.question_3)}\n'
-                           f'4: {get_cut_text(50, result.question_4)}\n'
-                           f'5: {get_cut_text(50, result.question_5)}')
+                           f'3: {get_cut_text(50, result.question_3)}\n')
+                           # f'4: {get_cut_text(50, result.question_4)}\n'
+                           # f'5: {get_cut_text(50, result.question_5)}')
 
             query_id = hashlib.md5(f'{result.id}'.encode()).hexdigest()
             date_str = result.create_date.strftime (DATE_FORMAT)
@@ -57,7 +57,9 @@ async def inline(call: InlineQuery, state: FSMContext):
             text = InputTextMessageContent(message_text=f'{result.id}')
 
         elif data.get ('on') == 'thanks':
-            description = get_cut_text(50, result.text)
+            description = (f'За что я благодарю себя сегодня?\n'
+                           f'1. {get_cut_text(50, result.thank_1)}\n'
+                           f'2. {get_cut_text(50, result.thank_2)}')
             query_id = hashlib.md5 (f'{result.id}'.encode ()).hexdigest ()
 
             date_str = result.create_date.strftime (DATE_FORMAT)
@@ -66,10 +68,7 @@ async def inline(call: InlineQuery, state: FSMContext):
             text = InputTextMessageContent (message_text=f'{result.id}')
 
         elif data.get ('on') == 'timezone':
-            # k = list(result.keys())[0]
-            # print(k)
             k, v = list(result.items())[0]
-            print(k, v)
             query_id = hashlib.md5 (k.encode ()).hexdigest ()
             title = v["name"]
             text = InputTextMessageContent (message_text=k)
@@ -109,9 +108,9 @@ async def get_video(msg: Message, state: FSMContext):
                 f'Притяжение от {date_str} {time_str}:\n\n'
                 f'1: {result.question_1}\n'
                 f'2: {result.question_2}\n'
-                f'3: {result.question_3}\n'
-                f'4: {result.question_4}\n'
-                f'5: {result.question_5}')
+                f'3: {result.question_3}\n')
+                # f'4: {result.question_4}\n'
+                # f'5: {result.question_5}')
 
             await bot.edit_message_caption(
                 chat_id=msg.chat.id,
@@ -126,7 +125,16 @@ async def get_video(msg: Message, state: FSMContext):
             date_str = result.create_date.strftime(DATE_FORMAT)
             time_str = result.create_time.strftime(TIME_FORMAT)
             text = (f'Благодарность от {date_str} {time_str}:\n\n'
-                    f'{result.text}')
+                    f'{thanks_questions_text[1]}\n'
+                    f'1. <i>{result.thank_1}</i>\n'
+                    f'2. <i>{result.thank_2}</i>\n'
+                    f'3. <i>{result.thank_3}</i>\n'
+                    f'{thanks_questions_text[2]}\n'
+                    f'<i>{result.thank_4}</i>\n'
+                    f'{thanks_questions_text [3]}\n'
+                    f'<i>{result.thank_5}</i>\n'
+                    f'{thanks_questions_text [4]}\n'
+                    f'<i>{result.thank_6}</i>\n')
 
             await bot.edit_message_caption (
                 chat_id=msg.chat.id,

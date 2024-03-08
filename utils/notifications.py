@@ -5,7 +5,7 @@ import random
 
 import db
 import keyboards as kb
-from init import bot, scheduler, TZ, log_error
+from init import bot, scheduler, TZ, log_error, DATETIME_FORMAT
 from utils.cover_photos import get_cover_photo
 from utils import redis_utils as redis
 from enums import UserStatus
@@ -72,6 +72,7 @@ async def create_notify_stress_map():
 
     notify_map = {}
     for user_info in users:
+        print(user_info)
         random_hour = random.randint (11, 19)
         random_minute = random.randint (0, 59)
 
@@ -80,8 +81,8 @@ async def create_notify_stress_map():
         msc_time = user_time.astimezone (TZ)
 
         notify_map[user_info.user_id] = {
-            'user_time': user_time,
-            'msc_time': msc_time
+            'user_time': user_time.strftime(DATETIME_FORMAT),
+            'msc_time': msc_time.strftime(DATETIME_FORMAT)
         }
 
     redis.save_stress_notify(notify_map)
@@ -93,8 +94,11 @@ async def send_notify_stress():
     notify_map = redis.get_stress_notify()
 
     now = datetime.now(TZ).replace(second=0, microsecond=0)
+    log_error(f'Запуск напоминания стресс {now}')
     for k, v in notify_map.items():
-        if v['msc_time'] == now:
+        user_notify_time = datetime.strptime(v['msc_time'], DATETIME_FORMAT)
+
+        if user_notify_time == now:
             user_info = await db.get_user_info(k)
             if user_info.notify_stress:
                 await bot.send_photo (

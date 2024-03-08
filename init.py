@@ -38,8 +38,10 @@ ENGINE = create_async_engine(url=getenv('DB_URL'))
 
 REDIS_CLIENT = redis.Redis(host=getenv('REDIS_HOST'), port=getenv('REDIS_PORT'), db=0)
 
-DATE_FORMAT = getenv('DATE_FORMAT')
-TIME_FORMAT = getenv('TIME_FORMAT')
+
+DATE_FORMAT = '%d.%m.%Y'
+TIME_FORMAT = '%H:%M'
+DATETIME_FORMAT = '%H:%M %d.%m.%Y'
 
 
 async def set_main_menu():

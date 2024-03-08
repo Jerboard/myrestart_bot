@@ -12,7 +12,7 @@ import numpy as np
 from init import TZ, log_error
 from db import DailyStressData
 
-matplotlib.use('Agg')
+plt.switch_backend('Agg')
 
 CMAP = LinearSegmentedColormap.from_list (
     name='stress',

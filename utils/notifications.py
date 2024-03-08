@@ -93,7 +93,6 @@ async def send_notify_stress():
     notify_map = redis.get_stress_notify()
 
     now = datetime.now(TZ).replace(second=0, microsecond=0)
-    log_error(f'Запуск напоминания стресс {now}')
     for k, v in notify_map.items():
         user_notify_time = datetime.strptime(v['msc_time'], DATETIME_FORMAT)
 

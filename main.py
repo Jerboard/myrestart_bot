@@ -11,7 +11,7 @@ from utils.notifications import notifications_scheduler
 async def main() -> None:
     await init_models()
     await set_main_menu()
-    # await notifications_scheduler ()
+    await notifications_scheduler ()
     await dp.start_polling(bot)
     await bot.session.close()
 
@@ -20,5 +20,5 @@ if __name__ == "__main__":
     if DEBUG:
         logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     else:
-        logging.basicConfig (level=logging.WARNING, filename='log.log')
+        logging.basicConfig (level=logging.WARNING, format="%(asctime)s %(levelname)s %(message)s", filename='log.log')
     asyncio.run(main())

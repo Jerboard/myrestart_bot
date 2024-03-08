@@ -14,7 +14,7 @@ from enums import UserStatus
 async def notifications_scheduler():
     scheduler.add_job (send_notify, 'cron', minute=0)
     scheduler.add_job (create_notify_stress_map, 'cron', hour=0, minute=0)
-    # scheduler.add_job (send_notify_stress, 'cron', second=0)
+    scheduler.add_job (send_notify_stress, 'cron', second=0)
     scheduler.start ()
 
 
@@ -72,7 +72,6 @@ async def create_notify_stress_map():
 
     notify_map = {}
     for user_info in users:
-        print(user_info)
         random_hour = random.randint (11, 19)
         random_minute = random.randint (0, 59)
 

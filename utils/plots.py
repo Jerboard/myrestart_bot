@@ -97,6 +97,7 @@ def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
     def normal_pdf(x, mean, var_):
         return np.exp(-(x - mean) ** 2 / (2 * var_))
 
+    plt.switch_backend ('Agg')
     xmin, xmax, ymin, ymax = (0, 100, 0, 100)
     n_bins = 100
     xx = np.linspace(xmin, xmax, n_bins)
@@ -129,7 +130,7 @@ def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
     ax.imshow(weights, **imshow_kwargs)
     ax.set_axis_off()
 
-    plt.switch_backend ('Agg')
+    # plt.switch_backend ('Agg')
 
     file_path = os.path.join('temp', f'global_{user_id}.jpg')
     plt.savefig(file_path, format='jpg', dpi=500)

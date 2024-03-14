@@ -47,10 +47,10 @@ def get_check_stress_kb() -> InlineKeyboardMarkup:
 # Отметить состояние
 def get_archive_stress_kb(plot_type: str) -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
-    if plot_type == 'global':
-        kb.button(text='📆 График по дням', callback_data=f'{DiaryCB.DIARY_STRESS_ARCHIVE.value}:daily')
-    else:
-        kb.button(text='📊 Общий график', callback_data=f'{DiaryCB.DIARY_STRESS_ARCHIVE.value}:global')
+    # if plot_type == 'global':
+    kb.button(text='📆 График по дням', callback_data=f'{DiaryCB.DIARY_STRESS_ARCHIVE.value}:daily')
+    # else:
+    kb.button(text='📊 Общий график', callback_data=f'{DiaryCB.DIARY_STRESS_ARCHIVE.value}:global')
     kb.button(text='🔙 Назад', callback_data=DiaryCB.DIARY_STRESS_MAIN.value)
     kb.adjust (1)
     return kb.as_markup()

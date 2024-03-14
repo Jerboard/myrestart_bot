@@ -80,5 +80,8 @@ def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
     # plt.switch_backend ('Agg')
     # plt.switch_backend ('GTK3Cairo')
 
-    file_path = os.path.join ('temp', f'global_{user_id}.jpg')
-    plt.savefig (file_path, format='jpg', dpi=500)
+    # file_path = os.path.join ('temp', f'global_{user_id}.jpg')
+    # plt.savefig (file_path, format='jpg', dpi=500)
+
+    file_path = os.path.join ('temp', f'global_{user_id}.png')
+    plt.savefig (file_path, format='png', dpi=500)

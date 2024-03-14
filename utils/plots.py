@@ -39,47 +39,48 @@ def get_daily_stress_plot(user_id: int, data: tuple[DailyStressData]):
 
 
 # глобальный график
-# def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
-#     print(f'happy: {happy}, unhappy: {unhappy}')
-#     def normal_pdf(x, mean, var_):
-#         return np.exp (-(x - mean) ** 2 / (2 * var_))
-#
-#     xmin, xmax, ymin, ymax = (0, 100, 0, 100)
-#     n_bins = 100
-#     xx = np.linspace (xmin, xmax, n_bins)
-#     yy = np.linspace (ymin, ymax, n_bins)
-#
-#     means_high = [60, 40]
-#     means_low = [40, 60]
-#
-#     var = [happy, unhappy]
-#
-#     gauss_x_high = normal_pdf (xx, means_high [0], var [0])
-#     gauss_y_high = normal_pdf (yy, means_high [1], var [0])
-#
-#     gauss_x_low = normal_pdf (xx, means_low [0], var [1])
-#     gauss_y_low = normal_pdf (yy, means_low [1], var [1])
-#
-#     weights = (np.outer (gauss_y_high, gauss_x_high)
-#                - np.outer (gauss_y_low, gauss_x_low))
-#
-#     greys = np.full ((*weights.shape, 3), 70, dtype=np.uint8)
-#
-#     vmax = np.abs (weights).max ()
-#     imshow_kwargs = {
-#         'vmax': vmax,
-#         'vmin': -vmax,
-#         'cmap': CMAP,
-#         'extent': (xmin, xmax, ymin, ymax),
-#     }
-#
-#     fig, ax = plt.subplots ()
-#     ax.imshow (greys)
-#     ax.imshow (weights, **imshow_kwargs)
-#     ax.set_axis_off ()
-#
-#     file_path = os.path.join ('temp', f'global_{user_id}.jpg')
-#     plt.savefig (file_path, format='jpg', dpi=500)
+def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
+    plt.switch_backend ('Agg')
+    print(f'happy: {happy}, unhappy: {unhappy}')
+    def normal_pdf(x, mean, var_):
+        return np.exp (-(x - mean) ** 2 / (2 * var_))
+
+    xmin, xmax, ymin, ymax = (0, 100, 0, 100)
+    n_bins = 100
+    xx = np.linspace (xmin, xmax, n_bins)
+    yy = np.linspace (ymin, ymax, n_bins)
+
+    means_high = [60, 40]
+    means_low = [40, 60]
+
+    var = [happy, unhappy]
+
+    gauss_x_high = normal_pdf (xx, means_high [0], var [0])
+    gauss_y_high = normal_pdf (yy, means_high [1], var [0])
+
+    gauss_x_low = normal_pdf (xx, means_low [0], var [1])
+    gauss_y_low = normal_pdf (yy, means_low [1], var [1])
+
+    weights = (np.outer (gauss_y_high, gauss_x_high)
+               - np.outer (gauss_y_low, gauss_x_low))
+
+    greys = np.full ((*weights.shape, 3), 70, dtype=np.uint8)
+
+    vmax = np.abs (weights).max ()
+    imshow_kwargs = {
+        'vmax': vmax,
+        'vmin': -vmax,
+        'cmap': CMAP,
+        'extent': (xmin, xmax, ymin, ymax),
+    }
+
+    fig, ax = plt.subplots ()
+    ax.imshow (greys)
+    ax.imshow (weights, **imshow_kwargs)
+    ax.set_axis_off ()
+
+    file_path = os.path.join ('temp', f'global_{user_id}.jpg')
+    plt.savefig (file_path, format='jpg', dpi=500)
 #
 #     # plt.switch_backend ('Agg')
 #     # plt.switch_backend ('GTK3Cairo')
@@ -91,46 +92,48 @@ def get_daily_stress_plot(user_id: int, data: tuple[DailyStressData]):
 #     plt.savefig (file_path, format='png', dpi=500)
 
 
-def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
-    print(f'happy: {happy}, unhappy: {unhappy}')
-    def normal_pdf(x, mean, var_):
-        return np.exp(-(x - mean) ** 2 / (2 * var_))
-
-    xmin, xmax, ymin, ymax = (0, 100, 0, 100)
-    n_bins = 100
-    xx = np.linspace(xmin, xmax, n_bins)
-    yy = np.linspace(ymin, ymax, n_bins)
-
-    means_high = [60, 40]
-    means_low = [40, 60]
-
-    var = [happy, unhappy]
-
-    gauss_x_high = normal_pdf(xx, means_high[0], var[0])
-    gauss_y_high = normal_pdf(yy, means_high[1], var[0])
-
-    gauss_x_low = normal_pdf(xx, means_low[0], var[1])
-    gauss_y_low = normal_pdf(yy, means_low[1], var[1])
-
-    weights = (np.outer(gauss_y_high, gauss_x_high)
-               - np.outer(gauss_y_low, gauss_x_low))
-
-    greys = np.full((*weights.shape, 3), 70, dtype=np.uint8)
-
-    vmax = np.abs(weights).max()
-    imshow_kwargs = {
-        'vmax': vmax,
-        'vmin': -vmax,
-        'cmap': 'viridis', # Пример цветовой карты
-        'extent': (xmin, xmax, ymin, ymax),
-    }
-
-    fig, ax = plt.subplots()
-    ax.imshow(weights, **imshow_kwargs)
-    ax.set_axis_off()
-
-    # Для отладки
-    # plt.show()
-
-    file_path = os.path.join('temp', f'global_{user_id}.jpg')
-    plt.savefig(file_path, format='jpg', dpi=500)
+# def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
+#     plt.switch_backend ('Agg')
+#     print(f'happy: {happy}, unhappy: {unhappy}')
+#     def normal_pdf(x, mean, var_):
+#         return np.exp(-(x - mean) ** 2 / (2 * var_))
+#
+#     xmin, xmax, ymin, ymax = (0, 100, 0, 100)
+#     n_bins = 100
+#     xx = np.linspace(xmin, xmax, n_bins)
+#     yy = np.linspace(ymin, ymax, n_bins)
+#
+#     means_high = [60, 40]
+#     means_low = [40, 60]
+#
+#     var = [happy, unhappy]
+#
+#     gauss_x_high = normal_pdf(xx, means_high[0], var[0])
+#     gauss_y_high = normal_pdf(yy, means_high[1], var[0])
+#
+#     gauss_x_low = normal_pdf(xx, means_low[0], var[1])
+#     gauss_y_low = normal_pdf(yy, means_low[1], var[1])
+#
+#     weights = (np.outer(gauss_y_high, gauss_x_high)
+#                - np.outer(gauss_y_low, gauss_x_low))
+#
+#     greys = np.full((*weights.shape, 3), 70, dtype=np.uint8)
+#
+#     vmax = np.abs(weights).max()
+#     imshow_kwargs = {
+#         'vmax': vmax,
+#         'vmin': -vmax,
+#         'cmap': CMAP, # Пример цветовой карты
+#         # 'cmap': 'viridis', # Пример цветовой карты
+#         'extent': (xmin, xmax, ymin, ymax),
+#     }
+#
+#     fig, ax = plt.subplots()
+#     ax.imshow(weights, **imshow_kwargs)
+#     ax.set_axis_off()
+#
+#     # Для отладки
+#     # plt.show()
+#
+#     file_path = os.path.join('temp', f'global_{user_id}.jpg')
+#     plt.savefig(file_path, format='jpg', dpi=500)

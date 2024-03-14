@@ -40,6 +40,7 @@ def get_daily_stress_plot(user_id: int, data: tuple[DailyStressData]):
 
 # глобальный график
 def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
+    print(f'happy: {happy}, unhappy: {unhappy}')
     def normal_pdf(x, mean, var_):
         return np.exp (-(x - mean) ** 2 / (2 * var_))
 

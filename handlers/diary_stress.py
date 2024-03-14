@@ -77,8 +77,7 @@ async def account_start(cb: CallbackQuery):
 
             text = 'График состояния за весь период'
 
-            # cached_plot = await db.get_plot_cache(type_=plot_type, comment=plot_ident)
-            cached_plot = False
+            cached_plot = await db.get_plot_cache(type_=plot_type, comment=plot_ident)
             if cached_plot:
                 photo = InputMediaPhoto (media=cached_plot.file_id, caption=text)
                 await cb.message.edit_media (media=photo, reply_markup=kb.get_archive_stress_kb (plot_type))
@@ -89,13 +88,12 @@ async def account_start(cb: CallbackQuery):
                     happy=happy_count,
                     unhappy=unhappy_count
                 )
-                # photo_path = os.path.join ('temp', f'{plot_type}_{cb.from_user.id}.png')
                 photo_path = os.path.join ('temp', f'{plot_type}_{cb.from_user.id}.jpg')
                 photo_input = FSInputFile (photo_path)
 
                 photo = InputMediaPhoto (media=photo_input, caption=text)
                 sent = await cb.message.edit_media (media=photo, reply_markup=kb.get_archive_stress_kb (plot_type))
-                # await db.add_plot_in_cache_global(type_=plot_type, comment=plot_ident, file_id=sent.photo[-1].file_id)
+                await db.add_plot_in_cache_global(type_=plot_type, comment=plot_ident, file_id=sent.photo[-1].file_id)
 
                 os.remove(photo_path)
 
@@ -120,12 +118,12 @@ async def account_start(cb: CallbackQuery):
                 photo = InputMediaPhoto (media=photo_input, caption=text)
                 sent = await cb.message.edit_media (media=photo, reply_markup=kb.get_archive_stress_kb (plot_type))
 
-                # await db.add_plot_in_cache_daily (
-                #     type_=plot_type,
-                #     user_id=cb.from_user.id,
-                #     file_id=sent.photo [-1].file_id,
-                #     new_entry=True if cached_plot is None else False
-                # )
+                await db.add_plot_in_cache_daily (
+                    type_=plot_type,
+                    user_id=cb.from_user.id,
+                    file_id=sent.photo [-1].file_id,
+                    new_entry=True if cached_plot is None else False
+                )
 
                 os.remove (photo_path)
 

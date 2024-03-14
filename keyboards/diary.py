@@ -30,7 +30,6 @@ def get_main_stress_kb() -> InlineKeyboardMarkup:
     kb.button(text='🌓 Отметить состояние', callback_data=DiaryCB.DIARY_STRESS_CHECK_CHOICE.value)
     kb.button(text='📚 Архив состояний', callback_data=f'{DiaryCB.DIARY_STRESS_ARCHIVE.value}:global')
     kb.button(text='🔙 Назад', callback_data=BaseCB.ACCOUNT_START.value)
-    kb.button (text='📆 График по дням', callback_data=f'{DiaryCB.DIARY_STRESS_ARCHIVE.value}:daily')
     kb.adjust (1)
     return kb.as_markup()
 

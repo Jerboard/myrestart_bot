@@ -89,7 +89,8 @@ async def account_start(cb: CallbackQuery):
                     happy=happy_count,
                     unhappy=unhappy_count
                 )
-                photo_path = os.path.join ('temp', f'{plot_type}_{cb.from_user.id}.png')
+                # photo_path = os.path.join ('temp', f'{plot_type}_{cb.from_user.id}.png')
+                photo_path = os.path.join ('temp', f'{plot_type}_{cb.from_user.id}.jpg')
                 photo_input = FSInputFile (photo_path)
 
                 photo = InputMediaPhoto (media=photo_input, caption=text)

@@ -63,8 +63,6 @@ async def account_start(cb: CallbackQuery):
 async def account_start(cb: CallbackQuery):
     _, plot_type = cb.data.split (':')
 
-    log_error(f'plot_type: {plot_type}')
-
     if plot_type == 'global':
         global_plot_data = await db.get_global_stress_data(cb.from_user.id)
         if not global_plot_data.happy and not global_plot_data.unhappy:
@@ -79,7 +77,8 @@ async def account_start(cb: CallbackQuery):
 
             text = 'График состояния за весь период'
 
-            cached_plot = await db.get_plot_cache(type_=plot_type, comment=plot_ident)
+            # cached_plot = await db.get_plot_cache(type_=plot_type, comment=plot_ident)
+            cached_plot = False
             if cached_plot:
                 photo = InputMediaPhoto (media=cached_plot.file_id, caption=text)
                 await cb.message.edit_media (media=photo, reply_markup=kb.get_archive_stress_kb (plot_type))
@@ -102,10 +101,12 @@ async def account_start(cb: CallbackQuery):
     else:
         text = 'График состояния по дням'
 
-        last_stress_add = await db.get_last_stress_time(cb.from_user.id)
-        cached_plot = await db.get_plot_cache(type_=plot_type, comment=str(cb.from_user.id))
+        # last_stress_add = await db.get_last_stress_time(cb.from_user.id)
+        # cached_plot = await db.get_plot_cache(type_=plot_type, comment=str(cb.from_user.id))
+        cached_plot = False
 
-        if cached_plot and cached_plot.created_at > last_stress_add:
+        # if cached_plot and cached_plot.created_at > last_stress_add:
+        if cached_plot:
             photo = InputMediaPhoto (media=cached_plot.file_id, caption=text)
             await cb.message.edit_media (media=photo, reply_markup=kb.get_archive_stress_kb (plot_type))
 

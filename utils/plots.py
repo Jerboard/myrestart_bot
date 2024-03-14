@@ -93,8 +93,7 @@ def get_daily_stress_plot(user_id: int, data: tuple[DailyStressData]):
 
 
 def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
-    plt.switch_backend ('Agg')
-    print(f'happy: {happy}, unhappy: {unhappy}')
+    # plt.switch_backend ('Agg')
     def normal_pdf(x, mean, var_):
         return np.exp(-(x - mean) ** 2 / (2 * var_))
 
@@ -117,8 +116,6 @@ def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
     weights = (np.outer(gauss_y_high, gauss_x_high)
                - np.outer(gauss_y_low, gauss_x_low))
 
-    greys = np.full((*weights.shape, 3), 70, dtype=np.uint8)
-
     vmax = np.abs(weights).max()
     imshow_kwargs = {
         'vmax': vmax,
@@ -132,8 +129,7 @@ def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
     ax.imshow(weights, **imshow_kwargs)
     ax.set_axis_off()
 
-    # Для отладки
-    # plt.show()
+    plt.switch_backend ('Agg')
 
     file_path = os.path.join('temp', f'global_{user_id}.jpg')
     plt.savefig(file_path, format='jpg', dpi=500)

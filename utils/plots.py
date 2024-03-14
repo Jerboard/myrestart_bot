@@ -121,7 +121,7 @@ def get_global_stress_plot(user_id: int, happy: int, unhappy: int):
     imshow_kwargs = {
         'vmax': vmax,
         'vmin': -vmax,
-        'cmap': CMAP, # Пример цветовой карты
+        'cmap': 'viridis', # Пример цветовой карты
         'extent': (xmin, xmax, ymin, ymax),
     }
 
